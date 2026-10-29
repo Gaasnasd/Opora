@@ -81,5 +81,12 @@ data class NightSchedule(
     val endMin: Int = 7 * 60,
 )
 
+/** Попадает ли минута суток в ночь. Выключенная или пустая (start == end) ночь — никогда. */
+fun NightSchedule.contains(minuteOfDay: Int): Boolean = when {
+    !enabled || startMin == endMin -> false
+    startMin < endMin -> minuteOfDay in startMin until endMin
+    else -> minuteOfDay >= startMin || minuteOfDay < endMin
+}
+
 @Serializable
 data class PinData(val salt: String, val hash: String)
